@@ -45,13 +45,13 @@ pub async fn create_model(auth: Auth, content_type: &ContentType, data: Data<'_>
     )
 }
 
-#[get("/model/list?<limit>")]
-pub async fn list_models(auth: Auth, limit: Option<i64>, db: Db) -> Result<Value, ()> {
+#[get("/model/list?<limit>&<offset>")]
+pub async fn list_models(auth: Auth, limit: Option<i64>, offset: Option<i64>, db: Db) -> Result<Value, ()> {
     Ok(
         json!(
             db.run(
                 move |conn| {
-                    list_minified_by_account_id(conn, auth.id, limit)
+                    list_minified_by_account_id(conn, auth.id, limit, offset)
                 }
             ).await
         )

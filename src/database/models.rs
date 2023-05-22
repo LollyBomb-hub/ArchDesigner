@@ -29,7 +29,7 @@ pub fn create(conn: &mut PgConnection, info: &NewModel) -> ModelMinifiedInfoRead
         .expect("Error creating model")
 }
 
-pub fn list_minified_by_account_id(conn: &mut PgConnection, account_id: i32, limit: Option<i64>) -> Vec<ModelMinifiedInfoRead> {
+pub fn list_minified_by_account_id(conn: &mut PgConnection, account_id: i32, limit: Option<i64>, offset: Option<i64>) -> Vec<ModelMinifiedInfoRead> {
     models::dsl::models.select(
             (
                 models::model_id,
@@ -41,6 +41,7 @@ pub fn list_minified_by_account_id(conn: &mut PgConnection, account_id: i32, lim
             )
         )
         .filter(models::dsl::account_id.eq(account_id)).limit(limit.unwrap_or(10i64))
+        .offset(offset.unwrap_or(0i64))
         .get_results::<ModelMinifiedInfoRead>(conn)
         .expect("Could not load models!")
 }

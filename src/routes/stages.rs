@@ -25,13 +25,13 @@ pub async fn create_stage(auth: Auth, stage: Json<StageInfoCreate>, db: Db) -> R
     )
 }
 
-#[get("/stage/list?<limit>")]
-pub async fn list(auth: Auth, limit: Option<i64>, db: Db) -> Result<Value, ()> {
+#[get("/stage/list?<limit>&<offset>")]
+pub async fn list(auth: Auth, limit: Option<i64>, offset: Option<i64>, db: Db) -> Result<Value, ()> {
     Ok(
         json!(
             db.run(
                 move |conn| {
-                    list_by_account_id(conn, auth.id, limit)
+                    list_by_account_id(conn, auth.id, limit, offset)
                 }
             ).await
         )

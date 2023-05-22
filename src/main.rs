@@ -58,6 +58,7 @@ pub fn rocket() -> Rocket<Build> {
                 routes::models::get_complete_model,
                 routes::models::get_ifc_model,
                 routes::meshs::create_mesh,
+                routes::meshs::list_meshs,
                 routes::meshs::get_minified_mesh,
                 routes::meshs::get_complete_mesh,
                 routes::meshs::get_ply_mesh,

@@ -21,8 +21,8 @@ pub fn create(conn: &mut PgConnection, info: &NewStage) -> StageInfoRead {
 }
 
 
-pub fn list_by_account_id(conn: &mut PgConnection, account_id: i32, limit: Option<i64>) -> Vec<StageInfoRead> {
-    stages::dsl::stages.filter(stages::account_id.eq(account_id)).limit(limit.unwrap_or(10i64)).get_results::<StageInfoRead>(conn).expect("Error fetching stages by account id")
+pub fn list_by_account_id(conn: &mut PgConnection, account_id: i32, limit: Option<i64>, offset: Option<i64>) -> Vec<StageInfoRead> {
+    stages::dsl::stages.filter(stages::account_id.eq(account_id)).limit(limit.unwrap_or(10i64)).offset(offset.unwrap_or(0i64)).get_results::<StageInfoRead>(conn).expect("Error fetching stages by account id")
 }
 
 #[derive(Insertable)]

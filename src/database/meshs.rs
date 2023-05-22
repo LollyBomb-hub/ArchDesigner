@@ -54,3 +54,22 @@ pub fn read_complete(conn: &mut PgConnection, mesh_id: i32) -> MeshCompleteInfoR
         .get_result::<MeshCompleteInfoRead>(conn)
         .expect("Could not load!")
 }
+
+pub fn list_by_account_id(conn: &mut PgConnection, account_id: i32, limit: Option<i64>, offset: Option<i64>) -> Vec<MeshMinInfoRead> {
+    meshs::dsl::meshs
+        .select(
+            (
+                meshs::mesh_id,
+                meshs::account_id,
+                meshs::mesh_name,
+                meshs::mesh_description,
+                meshs::uploaded_at,
+                meshs::stars
+            )
+        )
+        .filter(meshs::account_id.eq(account_id))
+        .limit(limit.unwrap_or(10i64))
+        .offset(offset.unwrap_or(0i64))
+        .get_results::<MeshMinInfoRead>(conn)
+        .expect("Could not list meshs")
+}
