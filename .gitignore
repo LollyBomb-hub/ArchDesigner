@@ -1,3 +1,5 @@
 cmake-*/
 target/
 .idea/
+
+pack-designer.exe
