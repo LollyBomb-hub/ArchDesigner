@@ -53,3 +53,11 @@ pub fn get_model_complete(conn: &mut PgConnection, account_id: i32, model_id: i3
 pub fn get_model_ifc(conn: &mut PgConnection, account_id: i32, model_id: i32) -> String {
     models::dsl::models.select(models::model_ifc).filter(models::account_id.eq(account_id).and(models::model_id.eq(model_id))).get_result::<String>(conn).expect("Could not get ifc model")
 }
+
+pub fn count_by_account_id(conn: &mut PgConnection, account_id: i32) -> i64 {
+    models::table
+        .filter(models::account_id.eq(account_id))
+        .count()
+        .get_result::<i64>(conn)
+        .expect("Could not count models")
+}

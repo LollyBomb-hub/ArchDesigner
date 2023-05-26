@@ -1,6 +1,6 @@
 use rocket::serde::json::{Json, json, Value};
 
-use crate::{models::stages::{StageInfoCreate, StageToModelLinkInfoCreate}, auth::Auth, database::{Db, stages::{NewLink, NewStage, create, list_by_account_id, assign_model, get_full_stage_info}}};
+use crate::{models::stages::{StageInfoCreate, StageToModelLinkInfoCreate}, auth::Auth, database::{Db, stages::{NewLink, NewStage, create, list_by_account_id, assign_model, get_full_stage_info, count_by_account_id}}};
 
 #[post("/stage", data="<stage>", format="json")]
 pub async fn create_stage(auth: Auth, stage: Json<StageInfoCreate>, db: Db) -> Result<Value, ()> {
@@ -19,6 +19,19 @@ pub async fn create_stage(auth: Auth, stage: Json<StageInfoCreate>, db: Db) -> R
                             stage_description: sic.stage_description
                         }
                     )
+                }
+            ).await
+        )
+    )
+}
+
+#[get("/stage/count")]
+pub async fn count_stages(auth: Auth, db: Db) -> Result<Value, ()> {
+    Ok(
+        json!(
+            db.run(
+                move |conn| {
+                    count_by_account_id(conn, auth.id)
                 }
             ).await
         )

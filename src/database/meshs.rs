@@ -73,3 +73,11 @@ pub fn list_by_account_id(conn: &mut PgConnection, account_id: i32, limit: Optio
         .get_results::<MeshMinInfoRead>(conn)
         .expect("Could not list meshs")
 }
+
+pub fn count_by_account_id(conn: &mut PgConnection, account_id: i32) -> i64 {
+    meshs::table
+        .filter(meshs::account_id.eq(account_id))
+        .count()
+        .get_result::<i64>(conn)
+        .expect("Could not count meshs")
+}

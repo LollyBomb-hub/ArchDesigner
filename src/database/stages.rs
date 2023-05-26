@@ -83,3 +83,11 @@ pub fn get_full_stage_info(conn: &mut PgConnection, account_id: i32, stage_id: i
         models: full_models
     }
 }
+
+pub fn count_by_account_id(conn: &mut PgConnection, account_id: i32) -> i64 {
+    stages::table
+        .filter(stages::account_id.eq(account_id))
+        .count()
+        .get_result::<i64>(conn)
+        .expect("Could not count stages")
+}

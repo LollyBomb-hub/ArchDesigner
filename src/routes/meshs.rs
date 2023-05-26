@@ -2,7 +2,7 @@ use rocket::serde::json::{json, Json, Value};
 
 use crate::models::meshs::MeshInfoCreate;
 use crate::{auth::Auth, database::Db};
-use crate::database::meshs::{create, read_complete, read_minified, list_by_account_id, NewMesh};
+use crate::database::meshs::{create, read_complete, read_minified, count_by_account_id, list_by_account_id, NewMesh};
 
 #[post("/mesh", data="<mesh_info_create>", format="json")]
 pub async fn create_mesh(auth: Auth, mesh_info_create: Json<MeshInfoCreate>, db: Db) -> Result<Value, ()> {
@@ -18,6 +18,19 @@ pub async fn create_mesh(auth: Auth, mesh_info_create: Json<MeshInfoCreate>, db:
                         ply_contents: inner_info_create.ply_contents
                     }
                 )
+                }
+            ).await
+        )
+    )
+}
+
+#[get("/mesh/count")]
+pub async fn count_meshs(auth: Auth, db: Db) -> Result<Value, ()> {
+    Ok(
+        json!(
+            db.run(
+                move |conn| {
+                    count_by_account_id(conn, auth.id)
                 }
             ).await
         )
